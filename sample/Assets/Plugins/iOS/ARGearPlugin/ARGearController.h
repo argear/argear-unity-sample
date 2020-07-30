@@ -44,7 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)changeCameraFacing;
 -(char*)requestSignedUrl:(char*)fileUrl :(char*)title :(char*)type;
--(void)setItem:(int)type :(char*)filePath :(char*)uuid;
+-(void)setItem:(int)type
+              :(char*)filePath
+              :(char*)uuid
+       success:(nullable void (^)(void))successBlock
+          fail:(nullable void (^)(NSString* _Nullable msg))failBlock;
 -(void)setFilterLevel:(float)level;
 -(void)setBulge:(int)type;
 -(void)setBeauty:(float*)values;

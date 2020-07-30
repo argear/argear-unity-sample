@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ARGear;
 using ARGear.Sdk.Data;
+using ARGear.Callback;
 using ARGearSDK;
 using UnityEngine;
 
@@ -104,7 +105,16 @@ namespace Samples.Scripts
         
         private void DownloadComplete(ARGEnum.ContentsType type, string uuid)
         {
-            ARGearManager.Instance.SetItem(type, Application.persistentDataPath + "/" + uuid, uuid);
+            ARGearManager.Instance.SetItem(type, Application.persistentDataPath + "/" + uuid, uuid, new ARGearContentsCallback(
+                success =>
+                {
+                    // success
+                },
+                error =>
+                {
+                    // error
+                }
+            ));
         }
     }
 }

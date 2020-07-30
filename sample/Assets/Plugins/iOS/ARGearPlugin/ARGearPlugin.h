@@ -14,18 +14,20 @@
 extern "C" {
 #endif
 
+typedef void (CONTENTS_LOADING_RESULT_CALLBACK)(bool success, char* msg);
+
 // ARGear Unity Plugin
 void ARGearInit(char* apiUrl, char* apiKey, char* apiSecretKey, char* authKey, int* config);
-void ARGearResume();
-void ARGearPause();
-void ARGearDestroy();
+void ARGearResume(void);
+void ARGearPause(void);
+void ARGearDestroy(void);
 
-int ARGearGetRenderWidth();
-int ARGearGetRenderHeight();
-float ARGearGetHorizontalViewAngle();
-void* ARGearGetRenderedMTLTexID();
-int ARGearGetRenderedGLTexID();
-int ARGearGetSegmentationTextureId();
+int ARGearGetRenderWidth(void);
+int ARGearGetRenderHeight(void);
+float ARGearGetHorizontalViewAngle(void);
+void* ARGearGetRenderedMTLTexID(void);
+int ARGearGetRenderedGLTexID(void);
+int ARGearGetSegmentationTextureId(void);
 
 void ARGearSetDrawLandmark(bool isVisible);
 bool ARGearTrackedFaceValidation(int index);
@@ -35,9 +37,9 @@ float* ARGearGetBlendShapeWeight(int index);
 float* ARGearGetLandmark(int index);
 float* ARGearGetMesh(int index);
 
-void ARGearChangeCameraFacing();
+void ARGearChangeCameraFacing(void);
 char* ARGearRequestSignedUrl(char* url, char* title, char* uuid);
-void ARGearSetItem(int type, char* path, char* uuid);
+void ARGearSetItem(int type, char* path, char* uuid, CONTENTS_LOADING_RESULT_CALLBACK callback);
 void ARGearSetFilterLevel(float level);
 void ARGearSetBeauty(float* values);
 void ARGearSetBulge(int type);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ARGear.Sdk.Data;
+using ARGear.Callback;
 using UnityEngine;
 
 namespace ARGear.Sdk
@@ -49,7 +50,7 @@ namespace ARGear.Sdk
         [DllImport("__Internal")]
         private static extern string ARGearRequestSignedUrl(string url, string title, string uuid);
         [DllImport ("__Internal")]
-        private static extern int ARGearSetItem(int type, string path, string uuid);
+        private static extern void ARGearSetItem(int type, string path, string uuid, ARGeariOSCallback.ARGearContentsLoadingResult callback);
         [DllImport("__Internal")]
         private static extern void ARGearSetFilterLevel(float level);
         [DllImport("__Internal")]
@@ -267,19 +268,26 @@ namespace ARGear.Sdk
 #endif
         }
         
-        public void SetItem(ARGEnum.ContentsType type, string path, string uuid)
+        public void SetItem(
+            ARGEnum.ContentsType type,
+            string path,
+            string uuid,
+            ARGearContentsCallback callback1 = null,
+            ARGearAndroidContentsCallback callback2 = null)
         {
 #if UNITY_ANDROID
-            pluginClass.Call("setItem", (int)type, path, uuid);
+            if (pluginClass == null) return;
+            pluginClass.Call("setItem", (int)type, path, uuid, callback2);
 #elif UNITY_IOS
-            ARGearSetItem((int)type, path, uuid);
+            ARGeariOSCallback.argearContentsCallback = callback1;
+            ARGearSetItem((int)type, path, uuid, ARGeariOSCallback.contentsLoadingResult);
 #endif
         }
 
         public void SetFilterLevel(float level)
         {
 #if UNITY_ANDROID
-            pluginClass.Call("setFilterLevel", (int)(level * 100));
+            pluginClass.Call("setFilterLevel", (int)level);
 #elif UNITY_IOS
             ARGearSetFilterLevel(level);
 #endif

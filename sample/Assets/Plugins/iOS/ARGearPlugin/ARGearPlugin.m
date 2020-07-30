@@ -83,8 +83,13 @@ char* ARGearRequestSignedUrl(char* url, char* title, char* uuid) {
     return [argearController requestSignedUrl:url :title :uuid];
 }
 
-void ARGearSetItem(int type, char* path, char* uuid) {
-    [argearController setItem :type :path :uuid];
+void ARGearSetItem(int type, char* path, char* uuid, CONTENTS_LOADING_RESULT_CALLBACK callback) {
+    if (argearController == nil) return;
+    [argearController setItem:type :path :uuid success:^{
+        callback(true, "success");
+    } fail:^(NSString * _Nullable msg) {
+        callback(false, "fail");
+    }];
 }
 
 void ARGearSetFilterLevel(float level) {

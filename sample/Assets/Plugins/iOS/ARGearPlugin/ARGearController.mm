@@ -318,14 +318,13 @@
 
 -(char*)requestSignedUrl :(char*)fileUrl :(char*)title :(char*)type {
     __block NSString* callbackString = nil;
-
-    ARGAuthCallback callback;
-    callback.Success = ^(NSString *url) {
-        callbackString = url;
-    };
-
-    callback.Error = ^(ARGStatusCode code) {
-        callbackString = [NSString stringWithFormat:@"%d", (int)code];
+    
+    ARGAuthCallback callback = ^(NSString *url, ARGStatusCode code) {
+        if (code == ARGStatusCode_SUCCESS) {
+            callbackString = url;
+        } else {
+            callbackString = [NSString stringWithFormat:@"%d", (int)code];
+        }
     };
 
     [[_argSession auth] requestSignedUrlWithUrl:[NSString stringWithUTF8String:fileUrl]
@@ -335,10 +334,24 @@
     return strdup([callbackString UTF8String]);
 }
 
--(void)setItem:(int)itemType :(char*)filePath :(char*)uuid {
+-(void)setItem:(int)itemType
+              :(char*)filePath
+              :(char*)uuid
+       success:(void (^)(void))successBlock
+          fail:(void (^)(NSString* msg))failBlock{
+    
+    ARGContentsCallback callback = ^(BOOL success, NSString* _Nullable msg) {
+        if (success == YES) {
+            successBlock();
+        } else {
+            failBlock(msg);
+        }
+    };
+    
     [[_argSession contents] setItemWithType:(ARGContentItemType)itemType
                            withItemFilePath:[NSString stringWithUTF8String:filePath]
-                                 withItemID:[NSString stringWithUTF8String:uuid]];
+                                 withItemID:[NSString stringWithUTF8String:uuid]
+                                 completion:callback];
 }
 
 -(void)setFilterLevel:(float)level {

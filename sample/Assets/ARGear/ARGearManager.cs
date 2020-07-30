@@ -4,6 +4,7 @@ using System.Diagnostics;
 using ARGear.Sdk;
 using ARGear.Sdk.BasicApi;
 using ARGear.Sdk.Data;
+using ARGear.Callback;
 using ARGearSDK;
 using UnityEngine;
 using UnityEngine.Android;
@@ -166,14 +167,28 @@ namespace ARGear
         {
             ARGearNative.SetItem(type, filePath, uuid);
         }
-        
-        public void SetBeauty(float[] values)
+
+        public void SetItem(ARGEnum.ContentsType type, string filePath, string uuid, ARGearContentsCallback callback = null)
         {
 #if UNITY_ANDROID
-            ARGearNative.SetBeauty(ConvertBeautyData(values));
-#else            
-            ARGearNative.SetBeauty(values);
+            ARGearNative.SetItem(type, filePath, uuid, null, new ARGearAndroidContentsCallback(
+                success =>
+                {
+                    if (callback != null) callback.OnSuccess();
+                },
+                error =>
+                {
+                    if (callback != null) callback.OnError(error);
+                }
+            ));
+#elif UNITY_IOS
+            ARGearNative.SetItem(type, filePath, uuid, callback);
 #endif
+        }
+
+        public void SetBeauty(float[] values)
+        {          
+            ARGearNative.SetBeauty(ConvertBeautyData(values));
         }
         
         public void SetBulge(ARGEnum.BulgeType type)
@@ -183,7 +198,13 @@ namespace ARGear
 
         public void SetFilterLevel(float level)
         {
-            ARGearNative.SetFilterLevel(level);
+            float filterLevel = level;
+
+            if (level >= 100) filterLevel = 99;
+
+            if (level <= 0) filterLevel = 1;
+
+            ARGearNative.SetFilterLevel(filterLevel);
         }
         
         public void ClearContents(ARGEnum.ContentsType type)

@@ -11,7 +11,7 @@ public class FilterScrollController : BaseScrollController
     
     void Start()
     {
-        FilterLevelSlider.value = 1.0f;
+        FilterLevelSlider.value = 100.0f;
         FilterLevelSlider.onValueChanged.AddListener(
             delegate { ValueUpdate(); }
         );
@@ -60,7 +60,7 @@ public class FilterScrollController : BaseScrollController
     
     public override void OnButtonClick(Button button)
     {
-        FilterLevelSlider.value = 1.0f;
+        FilterLevelSlider.value = 100.0f;
         
         if (button.GetComponent<ButtonValue>() == null) return;
         SampleManager.Instance.SetFilter(button.GetComponent<ButtonValue>().index);
