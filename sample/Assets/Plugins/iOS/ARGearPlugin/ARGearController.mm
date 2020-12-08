@@ -59,7 +59,7 @@
         int configLength = sizeof(ApiConfig) / sizeof(*ApiConfig);
         for (int i = 0; i < configLength; i++) {
             if (ApiConfig[i] == 0) {
-                inferenceFeature |= ARGInferenceFeatureFaceLowTracking;
+                inferenceFeature |= ARGInferenceFeatureFaceMeshTracking;
             }
         }
     }
@@ -118,11 +118,6 @@
 //    NSLog(@"didOutputSampleBuffer = %d, %d", width, height);
 
     [_argSession updateSampleBuffer:sampleBuffer fromConnection:connection];
-}
-
-- (void)didOutputMetadataObjects:(nonnull NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(nonnull AVCaptureConnection *)connection {
-
-    [_argSession updateMetadataObjects:metadataObjects fromConnection:connection];
 }
 
 // MARK: - ARGearARGSession delegate

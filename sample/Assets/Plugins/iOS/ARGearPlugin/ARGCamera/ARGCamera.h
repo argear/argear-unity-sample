@@ -18,9 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                fromConnection:(AVCaptureConnection *)connection;
 
-- (void)didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects
-                  fromConnection:(AVCaptureConnection *)connection;
-
 @optional
 - (void)cameraDisplayStart;
 @end

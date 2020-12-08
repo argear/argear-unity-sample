@@ -146,15 +146,6 @@
     }
 }
 
-// Metadata delegate
-- (void)captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
-    
-    __weak ARGCamera *weakSelf = self;
-    if (_delegate != nil && [_delegate respondsToSelector:@selector(didOutputMetadataObjects: fromConnection:)]) {
-        [[weakSelf delegate] didOutputMetadataObjects:metadataObjects fromConnection:connection];
-    }
-}
-
 #pragma mark - Camera Functions
 - (void)toggleCamera:(void (^_Nullable)(void))completion {
     if (_currentCameraPosition == AVCaptureDevicePositionBack) {
